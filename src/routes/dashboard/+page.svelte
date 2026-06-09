@@ -11,6 +11,7 @@
 
   function statusBadge(site: SiteStats): { label: string; class: string } {
     if (site.status === 'ok') return { label: 'Live', class: 'badge-ok' };
+    if (site.status === 'coming_soon') return { label: 'Coming soon', class: 'badge-warn' };
     if (site.status === 'no_accounts') return { label: 'No accounts', class: 'badge-warn' };
     return { label: 'Unavailable', class: 'badge-error' };
   }
@@ -77,6 +78,9 @@
           <tr>
             <td>
               <a href={site.url} target="_blank" rel="noreferrer">{site.name}</a>
+              {#if site.note}
+                <div class="muted">{site.note}</div>
+              {/if}
               {#if site.error}
                 <div class="muted">{site.error}</div>
               {/if}

@@ -5,13 +5,14 @@ export type SiteStats = {
   id: string;
   name: string;
   url: string;
-  status: 'ok' | 'unavailable' | 'no_accounts';
+  status: 'ok' | 'unavailable' | 'no_accounts' | 'coming_soon';
   totalAccounts: number | null;
   verifiedAccounts: number | null;
   unverifiedAccounts: number | null;
   last7Days: number | null;
   last30Days: number | null;
   error?: string;
+  note?: string;
 };
 
 type UserCountRow = {
@@ -64,6 +65,18 @@ async function fetchMemlyraStats(): Promise<SiteStats> {
 }
 
 const staticSites: SiteStats[] = [
+  {
+    id: 'visagely',
+    name: 'Visagely',
+    url: 'https://visagely.com',
+    status: 'coming_soon',
+    totalAccounts: null,
+    verifiedAccounts: null,
+    unverifiedAccounts: null,
+    last7Days: null,
+    last30Days: null,
+    note: 'Announcement page live · early bird signups not connected yet'
+  },
   {
     id: 'hue-do',
     name: 'HueDo',
