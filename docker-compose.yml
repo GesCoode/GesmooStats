@@ -1,0 +1,19 @@
+services:
+  stats:
+    build: .
+    container_name: gesmoo-stats
+    restart: unless-stopped
+    ports:
+      - '3002:3000'
+    environment:
+      ORIGIN: ${ORIGIN}
+      SESSION_SECRET: ${SESSION_SECRET}
+      STATS_ADMIN_PASSWORD: ${STATS_ADMIN_PASSWORD}
+      MEMLYRA_DATABASE_URL: ${MEMLYRA_DATABASE_URL}
+      NODE_ENV: production
+    networks:
+      - memlyra_default
+
+networks:
+  memlyra_default:
+    external: true
