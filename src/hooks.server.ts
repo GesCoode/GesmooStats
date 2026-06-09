@@ -2,7 +2,9 @@ import { redirect } from '@sveltejs/kit';
 import { SESSION_COOKIE, validateSessionToken } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 
-const publicPaths = new Set(['/login']);
+function isPublicPath(pathname: string): boolean {
+  return pathname === '/login' || pathname === '/api/auth/login';
+}
 
 export const handle: Handle = async ({ event, resolve }) => {
   const token = event.cookies.get(SESSION_COOKIE);
@@ -10,7 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const { pathname } = event.url;
 
-  if (!event.locals.authenticated && !publicPaths.has(pathname)) {
+  if (!event.locals.authenticated && !isPublicPath(pathname)) {
     throw redirect(303, '/login');
   }
 
