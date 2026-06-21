@@ -34,6 +34,10 @@ a {
   padding: 2rem 0 3rem;
 }
 
+.page--wide {
+  width: min(1280px, calc(100% - 2rem));
+}
+
 .panel {
   background: color-mix(in srgb, var(--panel) 92%, white 4%);
   border: 1px solid var(--border);
@@ -101,6 +105,56 @@ a {
 .message-error {
   color: var(--danger);
   font-size: 0.9rem;
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.app-nav__title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.app-nav__links {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.app-nav__link {
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.app-nav__link:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--panel) 80%, white 8%);
+}
+
+.app-nav__link--active {
+  color: var(--text);
+  background: #121a24;
+  border: 1px solid var(--border);
 }
 
 .header {
@@ -223,4 +277,15 @@ a {
 .muted {
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.empty-panel {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.empty-panel__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }

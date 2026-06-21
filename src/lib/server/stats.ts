@@ -24,6 +24,7 @@ type UserCountRow = {
 };
 
 let memlyraSql: ReturnType<typeof postgres> | null = null;
+let cutepicsSql: ReturnType<typeof postgres> | null = null;
 
 function getMemlyraSql() {
   if (!memlyraSql) {
@@ -34,6 +35,17 @@ function getMemlyraSql() {
     memlyraSql = postgres(url, { max: 2, idle_timeout: 20 });
   }
   return memlyraSql;
+}
+
+function getCutepicsSql() {
+  if (!cutepicsSql) {
+    const url = env.CUTEPICS_DATABASE_URL;
+    if (!url) {
+      throw new Error('CUTEPICS_DATABASE_URL is not set');
+    }
+    cutepicsSql = postgres(url, { max: 2, idle_timeout: 20 });
+  }
+  return cutepicsSql;
 }
 
 async function fetchMemlyraStats(): Promise<SiteStats> {
@@ -61,6 +73,35 @@ async function fetchMemlyraStats(): Promise<SiteStats> {
     unverifiedAccounts: Number(row.unverified),
     last7Days: Number(row.last_7_days),
     last30Days: Number(row.last_30_days)
+  };
+}
+
+async function fetchCutePicsStats(): Promise<SiteStats> {
+  const sql = getCutepicsSql();
+
+  const rows = await sql<UserCountRow[]>`
+    SELECT
+      COUNT(*) FILTER (WHERE active)::text AS total,
+      COUNT(*) FILTER (WHERE active AND confirmed_at IS NOT NULL)::text AS verified,
+      COUNT(*) FILTER (WHERE active AND confirmed_at IS NULL)::text AS unverified,
+      COUNT(*) FILTER (WHERE active AND created_at > NOW() - INTERVAL '7 days')::text AS last_7_days,
+      COUNT(*) FILTER (WHERE active AND created_at > NOW() - INTERVAL '30 days')::text AS last_30_days
+    FROM subscribers
+  `;
+
+  const row = rows[0];
+
+  return {
+    id: 'cutepics',
+    name: 'CutePics',
+    url: 'https://cutepics.gesmoo.com',
+    status: 'ok',
+    totalAccounts: Number(row.total),
+    verifiedAccounts: Number(row.verified),
+    unverifiedAccounts: Number(row.unverified),
+    last7Days: Number(row.last_7_days),
+    last30Days: Number(row.last_30_days),
+    note: 'Email signups (active subscribers)'
   };
 }
 
@@ -119,7 +160,26 @@ export async function loadAllSiteStats(): Promise<{
     };
   }
 
-  const sites = [memlyra, ...staticSites];
+  let cutepics: SiteStats;
+
+  try {
+    cutepics = await fetchCutePicsStats();
+  } catch (error) {
+    cutepics = {
+      id: 'cutepics',
+      name: 'CutePics',
+      url: 'https://cutepics.gesmoo.com',
+      status: 'unavailable',
+      totalAccounts: null,
+      verifiedAccounts: null,
+      unverifiedAccounts: null,
+      last7Days: null,
+      last30Days: null,
+      error: error instanceof Error ? error.message : 'Could not load stats'
+    };
+  }
+
+  const sites = [memlyra, cutepics, ...staticSites];
 
   const totals = sites.reduce(
     (acc, site) => {

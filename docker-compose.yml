@@ -10,10 +10,14 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       STATS_ADMIN_PASSWORD: ${STATS_ADMIN_PASSWORD}
       MEMLYRA_DATABASE_URL: ${MEMLYRA_DATABASE_URL}
+      CUTEPICS_DATABASE_URL: ${CUTEPICS_DATABASE_URL}
       NODE_ENV: production
     networks:
       - memlyra_default
+      - cutepics_default
 
 networks:
   memlyra_default:
+    external: true
+  cutepics_default:
     external: true
