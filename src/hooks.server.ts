@@ -24,5 +24,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     throw redirect(303, event.locals.authenticated ? '/dashboard' : '/login');
   }
 
+  if (pathname === '/finances' || pathname.startsWith('/finances/') || pathname === '/api/finances') {
+    throw redirect(303, '/dashboard');
+  }
+
   return resolve(event);
 };

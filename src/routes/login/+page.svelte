@@ -35,14 +35,14 @@
 </script>
 
 <svelte:head>
-  <title>Sign in · Personal</title>
+  <title>Sign in · Gesmoo Stats</title>
 </svelte:head>
 
 <div class="login-wrap">
   <div class="panel login-panel">
-    <p class="muted">Personal</p>
-    <h1>Sign in</h1>
-    <p>Private space for stats, finances, and more.</p>
+    <p class="muted">Gesmoo</p>
+    <h1>Stats dashboard</h1>
+    <p>Private overview of accounts across your websites.</p>
 
     <form class="login-form" onsubmit={handleSubmit}>
       {#if error}

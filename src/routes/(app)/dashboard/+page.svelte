@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-  <title>Stats · Personal</title>
+  <title>Dashboard · Gesmoo Stats</title>
 </svelte:head>
 
 <header class="header">
